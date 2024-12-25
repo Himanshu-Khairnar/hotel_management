@@ -13,8 +13,7 @@ const hotelSchema = new Schema({
       zipCode: { type: String, required: true }
     },
     logo: {
-      url: { type: String, required: true },
-      filename: { type: String, required: true }
+      url: { type: String, required: true }
     },
     qrCode: {
       type: String,
@@ -30,7 +29,7 @@ const hotelSchema = new Schema({
   // Guest Model
   const guestSchema = new Schema({
     hotelId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Hotel',
       required: true
     },
@@ -108,7 +107,7 @@ const hotelSchema = new Schema({
       required: true
     },
     hotelId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Hotel',
       // Required only for GuestAdmin
       required: function() {
@@ -138,7 +137,7 @@ const hotelSchema = new Schema({
   // For tracking QR code scans and form submissions
   const visitorLogSchema = new Schema({
     hotelId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Hotel',
       required: true
     },
@@ -159,14 +158,14 @@ const hotelSchema = new Schema({
       default: false
     },
     guestId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Guest'
     }
   });
   
-  module.exports = {
-    Hotel: model('Hotel', hotelSchema),
-    Guest: model('Guest', guestSchema),
-    User: model('User', userSchema),
-    VisitorLog: model('VisitorLog', visitorLogSchema)
-  };
+  const Hotel = model("Hotel", hotelSchema);
+  const Guest = model("Guest", guestSchema);
+  const User = model("User", userSchema);
+  const VisitorLog = model("VisitorLog", visitorLogSchema);
+  
+  export { Hotel, Guest, User, VisitorLog };

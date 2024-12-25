@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 dotenv.config({path:'./.env'})
 events.defaultMaxListeners = 15
 
+app.get('/',(req,res)=>res.send('hello world'))
 connectDb().then(
     app.listen((process.env.PORT),()=>{
  
