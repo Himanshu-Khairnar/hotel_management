@@ -9,15 +9,18 @@ cloudinary.config({
 });
 
 const Cloudinary = async (filepath) => {
-  console.log(filepath)
-  const uploadResult = cloudinary.uploader
-    .upload(filepath)
-    .then((result) => console.log(result))
-    .catch((error) => {
-      console.log(error);
-    });
+ try {
+  const response = await cloudinary.uploader.upload(filepath, {
+    resource_type: "auto"
+})
 
-  return uploadResult;
+console.log(response)
+console.log("file  has been uploaded on cloudinary", response.url)
+return response;
+ } catch (error) {
+  console.log(error)
+ }
+  
 };
 
 export default Cloudinary;

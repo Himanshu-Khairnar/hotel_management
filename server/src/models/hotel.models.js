@@ -13,7 +13,8 @@ const hotelSchema = new Schema({
       zipCode: { type: String, required: true }
     },
     logo: {
-      url: { type: String, required: true }
+      url: { type: String, required: true },
+      path:{type:String,required:true}
     },
     qrCode: {
       type: String,
