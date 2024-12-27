@@ -1,24 +1,27 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from 'react'
-import MainAdminSignin from "./Pages/MainAdminSignin";
-import MainAdminPage from "./Pages/MainAdminPage";
-import GuestAdminSignin from "./Pages/GuestAdminSignin";
-import GuestAdminPage from "./Pages/GuestAdminPage";
-import User from "./Pages/User";
+import MainAdminSignin from "./Pages/MainAdminSignin.jsx";
+import MainAdminPage from "./Pages/MainAdminPage.jsx";
+import GuestAdminSignin from "./Pages/GuestAdminSignin.jsx";
+import GuestAdminPage from "./Pages/GuestAdminPage.jsx";
+import User from "./Pages/User.jsx";
+import GuestAdminPageForSingleGuest from "./Pages/GuestAdminPageForSingleGuest.jsx";
 
-export const App = () => {
+const App = () => {
   return (
     <div>
        <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainAdminSignin />}>
+        <Route path="/" element={<MainAdminSignin />}/>
           <Route path="/admindashboard/:id" element={<MainAdminPage/>} />
           <Route path="/signin/guestadmin" element={<GuestAdminSignin />} />
           <Route path="/dashboard/guestadmin/:id" element={<GuestAdminPage/>} />
+          <Route path="/dashboard/guestadmin/:id/:guestId" element={<GuestAdminPageForSingleGuest/>} />
           <Route path="/guest/:hotel" element={<User/>} />
-        </Route>
+      
       </Routes>
     </BrowserRouter>
     </div>
   )
 }
+export default App
