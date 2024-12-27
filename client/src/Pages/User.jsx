@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const User = ({ onSubmit }) => {
+const User = () => {
   const [formData, setFormData] = useState({
     name: "",
     mobileNumber: "",
@@ -174,15 +174,21 @@ const User = ({ onSubmit }) => {
           <label htmlFor="purposeOfVisit" className="form-label">
             Purpose of Visit
           </label>
-          <input
-            type="text"
+          <select
             className="form-control"
             id="purposeOfVisit"
             name="purposeOfVisit"
             value={formData.purposeOfVisit}
             onChange={handleChange}
             required
-          />
+          >
+            <option value="" disabled>
+              Select Purpose
+            </option>
+            <option value="Business">Business</option>
+            <option value="Personal">Personal</option>
+            <option value="Tourist">Tourist</option>
+          </select>
         </div>
 
         {/* Stay Dates */}

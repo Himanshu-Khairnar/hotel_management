@@ -3,7 +3,7 @@ import axios from "axios"
 
 const baseURL = 'http://localhost:3000/api'
 
-export const login = async(userName,password)=>{
+export const login = async(userName,password,role)=>{
     console.log(userName,password)
     try {
         const response = await axios({
@@ -11,7 +11,8 @@ export const login = async(userName,password)=>{
             url: `${baseURL}/login`,
             data: {
                 username: userName,
-                password: password
+                password: password,
+                role:role
             }
         })
 
@@ -47,5 +48,27 @@ export const gethotels = async()=>{
         return response.data
     } catch (error) {
         
+    }
+}
+
+export const specificHotelsbyIds = async(id)=>{
+    try{
+        const response = await axios({method:'get',url:`${baseURL}/hotels/${id}`})
+
+        return response.data
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+
+export const getGuests = async()=>{
+    try{
+        const response = await axios({method:'get',url:`${baseURL}/guests`
+        })
+        return response.data
+    }
+    catch(error){
+        console.log(error)
     }
 }

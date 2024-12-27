@@ -187,6 +187,11 @@ router.get("/guests/:id", async (req, res) => {
   res.json(guests);
 });
 
+router.get("/guests",async(req,res)=>{
+  const guest = await Guest.find()
+  res.json(guest)
+})
+
 router.put("/guests/:id", async (req, res) => {
   const guest = await Guest.findOneAndUpdate(
     { _id: req.params.id, hotelId: req.user.hotelId },
@@ -200,7 +205,7 @@ router.put("/guests/:id", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ name: req.body.name });
+    const user = await User.findOne({ name: req.body.name,role:req.body.role });
     if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
       return res.status(401).json({ message: "Invalid credentials" });
     }

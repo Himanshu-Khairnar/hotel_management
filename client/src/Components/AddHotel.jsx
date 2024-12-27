@@ -4,7 +4,7 @@ import Alert from "react-bootstrap/Alert";
 
 const AddHotel = () => {
   const [showError, setShowError] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false); // Success alert state
+  const [showSuccess, setShowSuccess] = useState(false);
   const [hotel, setHotel] = useState({});
   const [formData, setFormData] = useState({
     hotelName: "",
@@ -39,14 +39,14 @@ const AddHotel = () => {
         setHotel(addHotel);
         setShowSuccess(true);
         setShowError(false);
-         setFormData({
-           hotelName: "",
-           logo: null,
-           street: "",
-           city: "",
-           state: "",
-           zipCode: "",
-         });
+        setFormData({
+          hotelName: "",
+          logo: null,
+          street: "",
+          city: "",
+          state: "",
+          zipCode: "",
+        });
       } else {
         setShowError(true);
         setShowSuccess(false);
@@ -65,7 +65,7 @@ const AddHotel = () => {
           variant="danger"
           onClose={() => setShowError(false)}
           dismissible
-          className="mb-4"
+          className="mb-4 text-dark"
         >
           An error occurred while adding the hotel. Please try again.
         </Alert>
@@ -75,21 +75,27 @@ const AddHotel = () => {
           variant="success"
           onClose={() => setShowSuccess(false)}
           dismissible
-          className="mb-4"
+          className="mb-4 text-dark"
         >
           Hotel added successfully!
         </Alert>
       )}
-      <h2 className="text-center mb-4">Hotel Form</h2>
-      <form onSubmit={handleSubmit} className="row g-3">
+      <h2 className="text-center mb-4 text-white">Add a New Hotel</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="row g-3 bg-dark p-4 rounded shadow-sm"
+        style={{
+          border: "1px solid #fff",
+        }}
+      >
         {/* Hotel Name */}
         <div className="col-md-6">
-          <label htmlFor="hotelName" className="form-label">
+          <label htmlFor="hotelName" className="form-label text-white">
             Hotel Name
           </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control bg-black text-white border-white"
             id="hotelName"
             name="hotelName"
             value={formData.hotelName}
@@ -100,12 +106,12 @@ const AddHotel = () => {
 
         {/* Logo */}
         <div className="col-md-6">
-          <label htmlFor="logo" className="form-label">
+          <label htmlFor="logo" className="form-label text-white">
             Logo
           </label>
           <input
             type="file"
-            className="form-control"
+            className="form-control bg-black text-white border-white"
             id="logo"
             name="logo"
             accept="image/*"
@@ -116,12 +122,12 @@ const AddHotel = () => {
 
         {/* Address: Street */}
         <div className="col-12">
-          <label htmlFor="street" className="form-label">
+          <label htmlFor="street" className="form-label text-white">
             Street
           </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control bg-black text-white border-white"
             id="street"
             name="street"
             value={formData.street}
@@ -132,12 +138,12 @@ const AddHotel = () => {
 
         {/* Address: City */}
         <div className="col-md-6">
-          <label htmlFor="city" className="form-label">
+          <label htmlFor="city" className="form-label text-white">
             City
           </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control bg-black text-white border-white"
             id="city"
             name="city"
             value={formData.city}
@@ -148,12 +154,12 @@ const AddHotel = () => {
 
         {/* Address: State */}
         <div className="col-md-4">
-          <label htmlFor="state" className="form-label">
+          <label htmlFor="state" className="form-label text-white">
             State
           </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control bg-black text-white border-white"
             id="state"
             name="state"
             value={formData.state}
@@ -164,12 +170,12 @@ const AddHotel = () => {
 
         {/* Address: Zip Code */}
         <div className="col-md-2">
-          <label htmlFor="zipCode" className="form-label">
+          <label htmlFor="zipCode" className="form-label text-white">
             Zip Code
           </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control bg-black text-white border-white"
             id="zipCode"
             name="zipCode"
             value={formData.zipCode}
@@ -179,8 +185,8 @@ const AddHotel = () => {
         </div>
 
         {/* Submit Button */}
-        <div className="col-12">
-          <button type="submit" className="btn btn-primary">
+        <div className="col-12 text-center">
+          <button type="submit" className="btn btn-light px-5">
             Submit
           </button>
         </div>
@@ -189,7 +195,11 @@ const AddHotel = () => {
       {/* Display QR Code if hotel is added */}
       {hotel?.qrCode && (
         <div className="text-center mt-4">
-          <img src={hotel.qrCode} alt="Hotel QR Code" />
+          <img
+            src={hotel.qrCode}
+            alt="Hotel QR Code"
+            style={{ border: "2px solid white" }}
+          />
         </div>
       )}
     </div>

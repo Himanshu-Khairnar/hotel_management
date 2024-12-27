@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { Container, Form, Button, Alert, Row, Col } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
-import { login } from '../actions/user.actions';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from "react-router-dom";
+import { login } from "../actions/user.actions";
+import { useNavigate } from "react-router-dom";
+
 const SignInPage = () => {
-  const nav = useNavigate()
+  const nav = useNavigate();
   const [validated, setValidated] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [formdata,setformdata] = useState({
-    username:"",
-    password:""
-  })
+  const [formdata, setFormdata] = useState({
+    username: "",
+    password: "",
+  });
 
-  const handleSubmit =async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
 
@@ -22,13 +23,11 @@ const SignInPage = () => {
       setShowError(true);
     } else {
       setShowError(false);
-      console.log('Form submitted successfully');
     }
     setValidated(true);
 
-    const user = await login(formdata.username,formdata.password)
-    console.log(user)
-    !user && setShowError(true)
+    const user = await login(formdata.username, formdata.password, "MainAdmin");
+    !user && setShowError(true);
 
     user && nav(`/admindashboard/${user._id}`);
   };
@@ -36,45 +35,25 @@ const SignInPage = () => {
   return (
     <Container
       fluid
-      className="vh-100 d-flex align-items-center justify-content-center"
-      style={{
-        color: '#fff',
-      }}
+      className="vh-100 d-flex align-items-center justify-content-center bg-dark text-white"
     >
-      <Row className="h-100 w-100">
+      <Row className="w-100">
         <Col
           md={12}
           xs={12}
-          className="d-flex align-items-center justify-content-center mx-auto"
+          className="d-flex align-items-center justify-content-center"
         >
           <div
-            className="bg-white p-4 rounded"
+            className="p-4 rounded border"
             style={{
-              width: '100%',
-              maxWidth: '400px',
-              borderRadius: '16px',
-              boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.2)',
+              width: "100%",
+              maxWidth: "400px",
+              borderColor: "#ccc",
+              backgroundColor: "#1a1a1a",
             }}
           >
-            <h2
-              className="text-center mb-2"
-              style={{
-                color: '#6a11cb',
-                fontWeight: 'bold',
-                letterSpacing: '1px',
-              }}
-            >
-              Welcome Back
-            </h2>
-            <h4
-              className="text-center mb-4"
-              style={{
-                color: '#2575fc',
-                fontWeight: '600',
-              }}
-            >
-              Main Admin
-            </h4>
+            <h2 className="text-center mb-3 text-white-50">Welcome Back</h2>
+            <h4 className="text-center mb-4 text-white-50">Main Admin</h4>
 
             {showError && (
               <Alert
@@ -83,19 +62,22 @@ const SignInPage = () => {
                 dismissible
                 className="mb-4"
               >
-                Please fill out all required fields correctly.
+                Invalid username or password.
               </Alert>
             )}
 
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <Form.Group className="mb-4" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label className="text-white">Username</Form.Label>
                 <Form.Control
                   required
                   type="text"
-                  placeholder="Enter your name"
+                  placeholder="Enter your username"
                   value={formdata.username}
-                  onChange={(e)=>setformdata({...formdata,username:e.target.value})}
+                  onChange={(e) =>
+                    setFormdata({ ...formdata, username: e.target.value })
+                  }
+                  className="bg-dark text-white border-secondary"
                 />
                 <Form.Control.Feedback type="invalid">
                   Please provide a valid username.
@@ -103,13 +85,16 @@ const SignInPage = () => {
               </Form.Group>
 
               <Form.Group className="mb-4" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
+                <Form.Label className="text-white">Password</Form.Label>
                 <Form.Control
                   required
                   type="password"
                   placeholder="Enter your password"
                   value={formdata.password}
-                  onChange={(e)=>{setformdata({...formdata,password:e.target.value})}}
+                  onChange={(e) =>
+                    setFormdata({ ...formdata, password: e.target.value })
+                  }
+                  className="bg-dark text-white border-secondary"
                 />
               </Form.Group>
 
@@ -117,33 +102,25 @@ const SignInPage = () => {
                 <Form.Check
                   type="checkbox"
                   label="Remember me"
-                  style={{ fontSize: '0.9rem' }}
+                  className="text-white-50"
                 />
               </div>
 
               <Button
-                variant="primary"
+                variant="secondary"
                 type="submit"
                 className="w-100 mb-3"
-                style={{
-                  background: 'linear-gradient(135deg, #6a11cb, #2575fc)',
-                  border: 'none',
-                  fontSize: '1rem',
-                  padding: '0.75rem 0',
-                }}
+                style={{ fontSize: "1rem", padding: "0.75rem 0" }}
               >
                 Sign In
               </Button>
 
-              <p
-                className="text-center mb-0"
-                style={{ fontSize: '0.9rem', color: '#6a11cb' }}
-              >
-                Are you a GUEST ADMIN?{' '}
+              <p className="text-center mb-0 text-white-50">
+                Are you a GUEST ADMIN?{" "}
                 <Link
                   to="/signin/guestadmin"
                   className="text-decoration-none"
-                  style={{ color: '#2575fc', fontWeight: '600' }}
+                  style={{ color: "#ccc", fontWeight: "600" }}
                 >
                   Sign up
                 </Link>
