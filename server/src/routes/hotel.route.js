@@ -199,23 +199,30 @@ router.put("/guests/:id", async (req, res) => {
 
 
 router.post("/login", async (req, res) => {
-  const user = await User.findOne({ name: req.body.name });
-  if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-    return res.status(401).json({ message: "Invalid credentials" });
+  try {
+    const user = await User.findOne({ name: req.body.name });
+    if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+  
+    const token = jwt.sign(
+      { id: user._id, role: user.role, hotelId: user.hotelId },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+    const options = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      samesite: "None",
+    };
+    await User.findByIdAndUpdate(user._id, { lastLogin: new Date() });
+    res
+      .cookie("token", token, options)
+      .status(200)
+      .json({ token, message: "Login successful" });
+      } catch (error) {
+    console.log(error)
   }
-
-  const token = jwt.sign(
-    { id: user._id, role: user.role, hotelId: user.hotelId },
-    process.env.JWT_SECRET,
-    { expiresIn: "24h" }
-  );
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    samesite: "None",
-  };
-  await User.findByIdAndUpdate(user._id, { lastLogin: new Date() });
-  res.json(token).cookie("token", token, options);
 });
 
 
