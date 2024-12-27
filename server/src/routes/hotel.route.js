@@ -122,7 +122,7 @@ router.post("/register/admin", async (req, res) => {
 });
 
 // hotelRoutes.js
-router.post("/hotels", upload.single("logo"), async (req, res) => {
+router.post("/hotels", upload.single("logo"), async (req, res) => {r
   try {
     const { name, street, state, city, zipCode } = req.body;
 
@@ -219,12 +219,11 @@ router.post("/login", async (req, res) => {
     res
       .cookie("token", token, options)
       .status(200)
-      .json({ token, message: "Login successful" });
+      .json({ token, message: "Login successful" ,user});
       } catch (error) {
     console.log(error)
   }
 });
-
 
 
 export default router;

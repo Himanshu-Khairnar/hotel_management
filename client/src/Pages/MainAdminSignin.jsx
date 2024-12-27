@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { Container, Form, Button, Alert, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
-
+import { login } from '../actions/user.actions';
+import { useNavigate } from 'react-router-dom';
 const SignInPage = () => {
+  const nav = useNavigate()
   const [validated, setValidated] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [formdata,setformdata] = useState({
+    username:"",
+    password:""
+  })
 
-  const handleSubmit = (event) => {
+  const handleSubmit =async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
 
@@ -19,6 +25,12 @@ const SignInPage = () => {
       console.log('Form submitted successfully');
     }
     setValidated(true);
+
+    const user = await login(formdata.username,formdata.password)
+    console.log(user)
+    !user && setShowError(true)
+
+    user && nav(`/admindashboard/${user._id}`);
   };
 
   return (
@@ -80,11 +92,13 @@ const SignInPage = () => {
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
                   required
-                  type="email"
-                  placeholder="Enter your email"
+                  type="text"
+                  placeholder="Enter your name"
+                  value={formdata.username}
+                  onChange={(e)=>setformdata({...formdata,username:e.target.value})}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Please provide a valid email.
+                  Please provide a valid username.
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -94,6 +108,8 @@ const SignInPage = () => {
                   required
                   type="password"
                   placeholder="Enter your password"
+                  value={formdata.password}
+                  onChange={(e)=>{setformdata({...formdata,password:e.target.value})}}
                 />
               </Form.Group>
 

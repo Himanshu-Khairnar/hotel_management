@@ -1,40 +1,30 @@
-import React,{useState} from 'react'
-import RegisterHotelTable from '../Components/RegisterHotelTable'
-import AddHotel from '../Components/AddHotel'
+import React, { useEffect, useState } from "react";
+import RegisterHotelTable from "../Components/RegisterHotelTable";
+import AddHotel from "../Components/AddHotel";
+import { gethotels } from "../actions/user.actions.js";
 
 const MainAdminPage = () => {
+  const [hotels, setHotels] = useState([null]);
 
-   const [hotels, setHotels] = useState([
-     {
-       name: "Hotel Sunshine",
-       address: {
-         street: "123 Main St",
-         city: "New York",
-         state: "NY",
-         zipCode: "10001",
-       },
-       logo: new Blob(), // Example placeholder
-     },
-   ]);
+  useEffect(() => {
+    const getdata = async () => {
+      const data = await gethotels();
 
-   const handleEdit = (index) => {
-     alert(`Edit hotel at index: ${index}`);
-     // Implement edit logic
-   };
+      setHotels(data);
+    };
 
-   const handleDelete = (index) => {
-     setHotels((prevHotels) => prevHotels.filter((_, i) => i !== index));
-   };
+    getdata()
+  },[]);
+
+
   return (
-    <div className='h-100'>
+    <div className="h-100">
       <AddHotel />
       <RegisterHotelTable
-        hotels={hotels}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-      />
+       
+      />  
     </div>
   );
-}
+};
 
-export default MainAdminPage
+export default MainAdminPage;

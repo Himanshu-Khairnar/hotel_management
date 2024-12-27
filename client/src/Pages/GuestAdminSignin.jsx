@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { Container, Form, Button, Alert, Row, Col } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from "react-router-dom";
 
 const SignInPage = () => {
   const [validated, setValidated] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [formdata, setformdata] = useState({
+    username: "",
+    password: "",
+  });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
 
@@ -16,9 +20,15 @@ const SignInPage = () => {
       setShowError(true);
     } else {
       setShowError(false);
-      console.log('Form submitted successfully');
+      console.log("Form submitted successfully");
     }
     setValidated(true);
+
+    const user = await login(formdata.username, formdata.password);
+    console.log(user);
+    !user && setShowError(true);
+
+    user && nav(`/admindashboard/${user._id}`);
   };
 
   return (
@@ -26,7 +36,7 @@ const SignInPage = () => {
       fluid
       className="vh-100 d-flex align-items-center justify-content-center"
       style={{
-        color: '#fff',
+        color: "#fff",
       }}
     >
       <Row className="h-100 w-100">
@@ -38,18 +48,18 @@ const SignInPage = () => {
           <div
             className="bg-white p-4 rounded"
             style={{
-              width: '100%',
-              maxWidth: '400px',
-              borderRadius: '16px',
-              boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.2)',
+              width: "100%",
+              maxWidth: "400px",
+              borderRadius: "16px",
+              boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
             }}
           >
             <h2
               className="text-center mb-2"
               style={{
-                color: '#6a11cb',
-                fontWeight: 'bold',
-                letterSpacing: '1px',
+                color: "#6a11cb",
+                fontWeight: "bold",
+                letterSpacing: "1px",
               }}
             >
               Welcome Back
@@ -57,8 +67,8 @@ const SignInPage = () => {
             <h4
               className="text-center mb-4"
               style={{
-                color: '#2575fc',
-                fontWeight: '600',
+                color: "#2575fc",
+                fontWeight: "600",
               }}
             >
               Guest Admin
@@ -77,14 +87,14 @@ const SignInPage = () => {
 
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <Form.Group className="mb-4" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label> UserName</Form.Label>
                 <Form.Control
                   required
                   type="email"
                   placeholder="Enter your email"
                 />
                 <Form.Control.Feedback type="invalid">
-                  Please provide a valid email.
+                  
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -101,7 +111,7 @@ const SignInPage = () => {
                 <Form.Check
                   type="checkbox"
                   label="Remember me"
-                  style={{ fontSize: '0.9rem' }}
+                  style={{ fontSize: "0.9rem" }}
                 />
               </div>
 
@@ -110,10 +120,10 @@ const SignInPage = () => {
                 type="submit"
                 className="w-100 mb-3"
                 style={{
-                  background: 'linear-gradient(135deg, #6a11cb, #2575fc)',
-                  border: 'none',
-                  fontSize: '1rem',
-                  padding: '0.75rem 0',
+                  background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+                  border: "none",
+                  fontSize: "1rem",
+                  padding: "0.75rem 0",
                 }}
               >
                 Sign In
@@ -121,13 +131,13 @@ const SignInPage = () => {
 
               <p
                 className="text-center mb-0"
-                style={{ fontSize: '0.9rem', color: '#6a11cb' }}
+                style={{ fontSize: "0.9rem", color: "#6a11cb" }}
               >
-                Are you a MAIN ADMIN?{' '}
+                Are you a MAIN ADMIN?{" "}
                 <Link
                   to="/"
                   className="text-decoration-none"
-                  style={{ color: '#2575fc', fontWeight: '600' }}
+                  style={{ color: "#2575fc", fontWeight: "600" }}
                 >
                   Sign up
                 </Link>

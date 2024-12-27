@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import { registerHotels } from "../actions/user.actions";
+import Alert from "react-bootstrap/Alert";
 
 const AddHotel = () => {
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false); // Success alert state
+  const [hotel, setHotel] = useState({});
   const [formData, setFormData] = useState({
     hotelName: "",
     logo: null,
@@ -18,14 +23,63 @@ const AddHotel = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
-    // Add form submission logic here
+    const data = new FormData();
+    data.append("name", formData.hotelName);
+    data.append("logo", formData.logo);
+    data.append("street", formData.street);
+    data.append("city", formData.city);
+    data.append("state", formData.state);
+    data.append("zipCode", formData.zipCode);
+
+    try {
+      const addHotel = await registerHotels(data);
+      if (addHotel) {
+        setHotel(addHotel);
+        setShowSuccess(true);
+        setShowError(false);
+         setFormData({
+           hotelName: "",
+           logo: null,
+           street: "",
+           city: "",
+           state: "",
+           zipCode: "",
+         });
+      } else {
+        setShowError(true);
+        setShowSuccess(false);
+      }
+    } catch (error) {
+      console.error("Error adding hotel:", error);
+      setShowError(true);
+      setShowSuccess(false);
+    }
   };
 
   return (
     <div className="container mt-5">
+      {showError && (
+        <Alert
+          variant="danger"
+          onClose={() => setShowError(false)}
+          dismissible
+          className="mb-4"
+        >
+          An error occurred while adding the hotel. Please try again.
+        </Alert>
+      )}
+      {showSuccess && (
+        <Alert
+          variant="success"
+          onClose={() => setShowSuccess(false)}
+          dismissible
+          className="mb-4"
+        >
+          Hotel added successfully!
+        </Alert>
+      )}
       <h2 className="text-center mb-4">Hotel Form</h2>
       <form onSubmit={handleSubmit} className="row g-3">
         {/* Hotel Name */}
@@ -131,6 +185,13 @@ const AddHotel = () => {
           </button>
         </div>
       </form>
+
+      {/* Display QR Code if hotel is added */}
+      {hotel?.qrCode && (
+        <div className="text-center mt-4">
+          <img src={hotel.qrCode} alt="Hotel QR Code" />
+        </div>
+      )}
     </div>
   );
 };
