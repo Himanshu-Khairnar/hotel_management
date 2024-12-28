@@ -32,10 +32,10 @@ const SignInPage = () => {
       formdata.password,
       "GuestAdmin"
     );
-    console.log(user.id);
+    console.log(user);
     !user && setShowError(true);
 
-    user && nav(`/dashboard/guestadmin/${user._id}`);
+    user && nav(`/dashboard/guestadmin/${user._id}/hotel/${user.hotelId}`);
   };
 
   return (

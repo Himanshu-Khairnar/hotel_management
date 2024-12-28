@@ -18,8 +18,8 @@ const App = () => {
           <Route path="/admindashboard/:id/hotel/:hotelId" element={<MainAdminHotelPage/>}/>
           <Route path="/signin/guestadmin" element={<GuestAdminSignin />} />
           <Route 
-            path="/dashboard/guestadmin/:id"
-            element={<GuestAdminPage />}
+            path="/dashboard/guestadmin/:id/hotel/:hotel"
+            element={<GuestAdminPage/>}
           />
           <Route
             path="/dashboard/guestadmin/:id/guest/:guestId"

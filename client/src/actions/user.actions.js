@@ -54,7 +54,7 @@ export const gethotels = async () => {
 export const specificHotelsbyIds = async (id) => {
     try {
         const response = await axios({ method: 'get', url: `${baseURL}/hotels/${id}` })
-
+        console.log("hotel",response)
         return response.data
     }
     catch (error) {
@@ -65,7 +65,7 @@ export const specificHotelsbyIds = async (id) => {
 export const getGuests = async () => {
     try {
         const response = await axios({
-            method: 'get', url: `${baseURL}/guests`
+            method: 'get', url: `${baseURL}/guests `
         })
         return response.data
     }
@@ -80,7 +80,7 @@ export const postGuests = async (formdata) => {
         const response = await axios({
             method: 'post',
             url: `${baseURL}/guests`,
-            data:formdata
+            data: formdata
         })
         return response.data
 
@@ -90,10 +90,42 @@ export const postGuests = async (formdata) => {
     }
 }
 
-export const getSingleGuest = async (id)=>{
+export const getSingleGuest = async (id) => {
     try {
-        const response= await axios({method:"get",url:`${baseURL}/guests/${id}`})
+        const response = await axios({ method: "get", url: `${baseURL}/guests/${id}` })
         return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const updateHotel = async (formdata) => {
+    try {
+
+        const response = await axios({
+            method: 'patch',
+            url: `${baseURL}/hotels/${formdata.id}`,
+            data: formdata
+        })
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const deleteHotel = async (id) => {
+    try {
+        const res = await axios({ method: 'delete', url: `${baseURL}/hotels/${id}` })
+        return res
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const changeStatus = async (status, id) => {
+    try {
+        const response = await axios({ method: 'patch', url: `${baseURL}/guests/${id}` ,data:status})
+        return response
     } catch (error) {
         console.log(error)
     }

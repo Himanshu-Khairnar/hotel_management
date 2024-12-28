@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { upload } from "../multer.js";
 const router = Router();
-import { Hotel, Guest, User,VisitorLog } from "../models/hotel.models.js";
+import { Hotel, Guest, User, VisitorLog } from "../models/hotel.models.js";
 // authMiddleware.js
 
 // generating qr code
@@ -122,7 +122,8 @@ router.post("/register/admin", async (req, res) => {
 });
 
 // hotelRoutes.js
-router.post("/hotels", upload.single("logo"), async (req, res) => {r
+router.post("/hotels", upload.single("logo"), async (req, res) => {
+  
   try {
     const { name, street, state, city, zipCode } = req.body;
 
@@ -130,7 +131,6 @@ router.post("/hotels", upload.single("logo"), async (req, res) => {r
     let logoPath;
     if (req.file.path) logoPath = req.file.path;
     const urlfile = await Cloudinary(logoPath);
-    console.log(urlfile.url);
     //qr code
     const qrcode = await generateQRCode(
       `${process.env.BASE_URL}/guest/${req.body.name}`
@@ -155,15 +155,49 @@ router.get("/hotels", async (req, res) => {
   res.json(hotels);
 });
 
+router.patch('/hotels/:id', async (req, res) => {
+  try {
+
+    const { updatename, newStreet, newCity, newState, newCode } = req.body;
+console.log(updatename,newState,newCity,newStreet,newCode)
+    const response = await Hotel.findByIdAndUpdate(
+      req.params.id, 
+      {
+        name: updatename,
+        address: {
+          street: newStreet,
+          city: newCity,
+          state: newState,
+          zipCode: newCode,
+        },
+      },
+      { new: true }  );
+
+    // If the hotel is not found
+    if (!response) {
+      return res.status(404).json({ message: "Hotel not found" });
+    }
+
+    // Return the updated hotel data
+    return res.status(200).json({response});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Failed to update hotel" });
+  }
+});
+
+
+
 router.get("/hotels/:id", async (req, res) => {
+  console.log(req.params.id  )
   const hotel = await Hotel.findById(req.params.id);
-  res.json(hotel);
+  console.log(hotel)
+  res.status(200).json({hotel});
 });
 
 // guestRoutes.js
 router.post("/guests", async (req, res) => {
   try {
-    console.log(req.body.hotelId)
     const {
       hotelId,
       fullName,
@@ -178,7 +212,7 @@ router.post("/guests", async (req, res) => {
       emailId,
       idProofNumber
     } = req.body;
-  
+
     // Check for missing fields
     if (!hotelId || !fullName || !mobileNumber || !city || !street || !zipCode || !state || !purposeOfVisit || !from || !to || !emailId || !idProofNumber) {
       return res.status(400).json({ error: "All fields are required." });
@@ -193,43 +227,81 @@ router.post("/guests", async (req, res) => {
       emailId,
       idProofNumber,
     });
-  
-  
-  
-    res.status(201).json({ message: "Registration successful" ,guest});
+
+
+
+    res.status(201).json({ message: "Registration successful", guest });
   } catch (error) {
     console.log(error)
   }
 });
 
+
+router.delete("/hotels/:id", async (req, res) => {
+  try {
+    const hotel = await Hotel.findByIdAndDelete(req.params.id);
+
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found" });
+    }
+
+    return res.status(200).json({ message: "Hotel deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 router.get("/guests/:id", async (req, res) => {
-  const guests = await Guest.findById({_id: req.params.id });
+  const guests = await Guest.findById({ _id: req.params.id });
   res.json(guests);
 });
 
-router.get("/guests",async(req,res)=>{
+router.get("/guest/:hotel",async(req,res)=>{
+  const guests = await Guest.find({hotelId:req.params.hotel})
+  res.json(guests)
+})
+
+router.get("/guests", async (req, res) => {
   const guest = await Guest.find()
   res.json(guest)
 })
 
-router.put("/guests/:id", async (req, res) => {
-  const guest = await Guest.findOneAndUpdate(
-    { _id: req.params.id, hotelId: req.user.hotelId },
-    req.body,
-    { new: true }
-  );
-  res.json(guest);
+router.patch("/guests/:id", async (req, res) => {
+  try {
+    // Ensure status is part of the body if you're updating it
+    const { status,  } = req.body;
+
+    if (status) {
+      updateData.status = status;
+    }
+
+    // Find the guest by ID and update it with new values from the body
+    const guest = await Guest.findByIdAndUpdate(
+      req.params.id,
+      updateData, // Use the updated data from the request body
+      { new: true } // Return the modified document
+    );
+
+    if (!guest) {
+      return res.status(404).json({ message: "Guest not found" });
+    }
+
+    res.json(guest);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 
 
 
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ name: req.body.name,role:req.body.role });
+    const user = await User.findOne({ name: req.body.name, role: req.body.role });
     if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-  
+
     const token = jwt.sign(
       { id: user._id, role: user.role, hotelId: user.hotelId },
       process.env.JWT_SECRET,
@@ -244,11 +316,12 @@ router.post("/login", async (req, res) => {
     res
       .cookie("token", token, options)
       .status(200)
-      .json({ token, message: "Login successful" ,user});
-      } catch (error) {
+      .json({ token, message: "Login successful", user });
+  } catch (error) {
     console.log(error)
   }
 });
+
 
 
 export default router;

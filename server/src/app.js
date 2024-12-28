@@ -11,3 +11,6 @@ app.use(cookieParser())
 import Hotel from './routes/hotel.route.js'
 
 app.use('/api',Hotel)
+
+
+
