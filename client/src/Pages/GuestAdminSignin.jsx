@@ -4,15 +4,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { login } from "../actions/user.actions";
 import { useNavigate } from "react-router-dom";
-const SignInPage = () => {
 
-  const nav= useNavigate()
+const SignInPage = () => {
+  const nav = useNavigate();
   const [validated, setValidated] = useState(false);
   const [showError, setShowError] = useState(false);
   const [formdata, setformdata] = useState({
     username: "",
     password: "",
-
   });
 
   const handleSubmit = async (event) => {
@@ -27,7 +26,7 @@ const SignInPage = () => {
       console.log("Form submitted successfully");
     }
     setValidated(true);
-    console.log(formdata)
+    console.log(formdata);
     const user = await login(
       formdata.username,
       formdata.password,
@@ -35,7 +34,6 @@ const SignInPage = () => {
     );
     console.log(user.id);
     !user && setShowError(true);
-    
 
     user && nav(`/dashboard/guestadmin/${user._id}`);
   };
@@ -46,6 +44,7 @@ const SignInPage = () => {
       className="vh-100 d-flex align-items-center justify-content-center"
       style={{
         color: "#fff",
+        backgroundColor: "#000", // Strict black background
       }}
     >
       <Row className="h-100 w-100">
@@ -55,18 +54,18 @@ const SignInPage = () => {
           className="d-flex align-items-center justify-content-center mx-auto"
         >
           <div
-            className="bg-white p-4 rounded"
+            className="bg-dark p-4 rounded"
             style={{
               width: "100%",
               maxWidth: "400px",
               borderRadius: "16px",
-              boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
+              boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.5)", // Darker shadow
             }}
           >
             <h2
               className="text-center mb-2"
               style={{
-                color: "#6a11cb",
+                color: "#fff", // White text for heading
                 fontWeight: "bold",
                 letterSpacing: "1px",
               }}
@@ -76,7 +75,7 @@ const SignInPage = () => {
             <h4
               className="text-center mb-4"
               style={{
-                color: "#2575fc",
+                color: "#fff", // White color for subtitle
                 fontWeight: "600",
               }}
             >
@@ -96,25 +95,39 @@ const SignInPage = () => {
 
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <Form.Group className="mb-4" controlId="formBasicEmail">
-                <Form.Label> UserName</Form.Label>
+                <Form.Label style={{ color: "#fff" }}>UserName</Form.Label>
                 <Form.Control
                   required
                   type="text"
                   placeholder="Enter your username"
                   value={formdata.username}
-                  onChange={(e)=>setformdata({...formdata,username: e.target.value})}
+                  onChange={(e) =>
+                    setformdata({ ...formdata, username: e.target.value })
+                  }
+                  style={{
+                    backgroundColor: "#333", // Dark background for input
+                    color: "#fff", // White text inside input
+                    borderColor: "#555", // Lighter border for inputs
+                  }}
                 />
                 <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="mb-4" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
+                <Form.Label style={{ color: "#fff" }}>Password</Form.Label>
                 <Form.Control
                   required
                   type="password"
                   placeholder="Enter your password"
-                      value={formdata.password}
-                  onChange={(e)=>setformdata({...formdata,password: e.target.value})}
+                  value={formdata.password}
+                  onChange={(e) =>
+                    setformdata({ ...formdata, password: e.target.value })
+                  }
+                  style={{
+                    backgroundColor: "#333", // Dark background for input
+                    color: "#fff", // White text inside input
+                    borderColor: "#555", // Lighter border for inputs
+                  }}
                 />
               </Form.Group>
 
@@ -122,7 +135,7 @@ const SignInPage = () => {
                 <Form.Check
                   type="checkbox"
                   label="Remember me"
-                  style={{ fontSize: "0.9rem" }}
+                  style={{ fontSize: "0.9rem", color: "#fff" }} // White color for label
                 />
               </div>
 
@@ -131,7 +144,7 @@ const SignInPage = () => {
                 type="submit"
                 className="w-100 mb-3"
                 style={{
-                  background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+                  background: "#555", // Darker button background
                   border: "none",
                   fontSize: "1rem",
                   padding: "0.75rem 0",
@@ -142,13 +155,13 @@ const SignInPage = () => {
 
               <p
                 className="text-center mb-0"
-                style={{ fontSize: "0.9rem", color: "#6a11cb" }}
+                style={{ fontSize: "0.9rem", color: "#fff" }}
               >
                 Are you a MAIN ADMIN?{" "}
                 <Link
                   to="/"
                   className="text-decoration-none"
-                  style={{ color: "#2575fc", fontWeight: "600" }}
+                  style={{ color: "#fff", fontWeight: "600" }} // White link color
                 >
                   Sign up
                 </Link>

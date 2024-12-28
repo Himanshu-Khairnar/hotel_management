@@ -162,24 +162,44 @@ router.get("/hotels/:id", async (req, res) => {
 
 // guestRoutes.js
 router.post("/guests", async (req, res) => {
-  const {hotelId,fullName,mobileNumber,city,street,zipCode,state,purposeOfVisit,from,to,emailId,idProofNumber} = req.body
-  const guest = await Guest.create({
-    hotelId: hotelId,
-    fullName:fullName,
-    mobileNumber: mobileNumber,
-    address: {city,street,zipCode,state},
-    purposeOfVisit:purposeOfVisit,
-    stayDates: {from,to},
-    emailId: emailId,
-    idProofNumber:idProofNumber,
-  });
-
-  await VisitorLog.findOneAndUpdate(
-    { hotelId: hotelId, ipAddress: req.ip },
-    { formSubmitted: true, guestId: guest._id }
-  );
-
-  res.status(201).json({ message: "Registration successful" });
+  try {
+    console.log(req.body.hotelId)
+    const {
+      hotelId,
+      fullName,
+      mobileNumber,
+      city,
+      street,
+      zipCode,
+      state,
+      purposeOfVisit,
+      from,
+      to,
+      emailId,
+      idProofNumber
+    } = req.body;
+  
+    // Check for missing fields
+    if (!hotelId || !fullName || !mobileNumber || !city || !street || !zipCode || !state || !purposeOfVisit || !from || !to || !emailId || !idProofNumber) {
+      return res.status(400).json({ error: "All fields are required." });
+    }
+    const guest = await Guest.create({
+      hotelId,
+      fullName,
+      mobileNumber,
+      address: { city, street, zipCode, state },
+      purposeOfVisit,
+      stayDates: { from, to },
+      emailId,
+      idProofNumber,
+    });
+  
+  
+  
+    res.status(201).json({ message: "Registration successful" ,guest});
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 router.get("/guests/:id", async (req, res) => {

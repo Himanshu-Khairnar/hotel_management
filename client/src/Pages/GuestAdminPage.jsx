@@ -20,10 +20,10 @@ const GuestForm = () => {
   };
 
   return (
-    <div className="container-fluid bg-dark text-white p-4 min-vh-100">
+    <div className="container-fluid bg-dark text-white p-4 min-vh-100 ">
       <h2 className="text-center mb-4">Guest List</h2>
       <div className="table-responsive">
-        <table className="table table-dark table-hover table-bordered">
+        <table className="table table-dark table-hover table-">
           <thead>
             <tr>
               <th>Full Name</th>
