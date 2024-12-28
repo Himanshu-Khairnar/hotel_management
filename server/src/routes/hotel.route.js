@@ -7,7 +7,6 @@ import jwt from "jsonwebtoken";
 import { upload } from "../multer.js";
 const router = Router();
 import { Hotel, Guest, User, VisitorLog } from "../models/hotel.models.js";
-// authMiddleware.js
 
 // generating qr code
 
@@ -22,6 +21,8 @@ const generateQRCode = async (text) => {
   }
 };
 
+
+//register 
 router.post("/register/admin", async (req, res) => {
   try {
     const { username, password, email, role, hotelId } = req.body;
@@ -35,7 +36,6 @@ router.post("/register/admin", async (req, res) => {
       });
     }
 
-    // Validate role
     if (!["MainAdmin", "GuestAdmin"].includes(role)) {
       return res.status(400).json({
         success: false,
@@ -43,7 +43,6 @@ router.post("/register/admin", async (req, res) => {
       });
     }
 
-    // Validate hotelId for GuestAdmin
     if (role === "GuestAdmin" && !hotelId) {
       return res.status(400).json({
         success: false,
@@ -123,7 +122,7 @@ router.post("/register/admin", async (req, res) => {
 
 // hotelRoutes.js
 router.post("/hotels", upload.single("logo"), async (req, res) => {
-  
+
   try {
     const { name, street, state, city, zipCode } = req.body;
 
@@ -151,17 +150,21 @@ router.post("/hotels", upload.single("logo"), async (req, res) => {
 });
 
 router.get("/hotels", async (req, res) => {
-  const hotels = await Hotel.find();
-  res.json(hotels);
+  try {
+    const hotels = await Hotel.find();
+    res.json(hotels);
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 router.patch('/hotels/:id', async (req, res) => {
   try {
 
     const { updatename, newStreet, newCity, newState, newCode } = req.body;
-console.log(updatename,newState,newCity,newStreet,newCode)
+    console.log(updatename, newState, newCity, newStreet, newCode)
     const response = await Hotel.findByIdAndUpdate(
-      req.params.id, 
+      req.params.id,
       {
         name: updatename,
         address: {
@@ -171,7 +174,7 @@ console.log(updatename,newState,newCity,newStreet,newCode)
           zipCode: newCode,
         },
       },
-      { new: true }  );
+      { new: true });
 
     // If the hotel is not found
     if (!response) {
@@ -179,7 +182,7 @@ console.log(updatename,newState,newCity,newStreet,newCode)
     }
 
     // Return the updated hotel data
-    return res.status(200).json({response});
+    return res.status(200).json({ response });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Failed to update hotel" });
@@ -189,11 +192,31 @@ console.log(updatename,newState,newCity,newStreet,newCode)
 
 
 router.get("/hotels/:id", async (req, res) => {
-  console.log(req.params.id  )
-  const hotel = await Hotel.findById(req.params.id);
-  console.log(hotel)
-  res.status(200).json({hotel});
+  try {
+    console.log(req.params.id)
+    const hotel = await Hotel.findById(req.params.id);
+    console.log(hotel)
+    res.status(200).json({ hotel });
+  } catch (error) {
+    console.log(error)
+  }
 });
+
+router.delete("/hotels/:id", async (req, res) => {
+  try {
+    const hotel = await Hotel.findByIdAndDelete(req.params.id);
+
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found" });
+    }
+
+    return res.status(200).json({ message: "Hotel deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 // guestRoutes.js
 router.post("/guests", async (req, res) => {
@@ -236,41 +259,36 @@ router.post("/guests", async (req, res) => {
   }
 });
 
-
-router.delete("/hotels/:id", async (req, res) => {
+router.get("/guests/:id", async (req, res) => {
   try {
-    const hotel = await Hotel.findByIdAndDelete(req.params.id);
-
-    if (!hotel) {
-      return res.status(404).json({ message: "Hotel not found" });
-    }
-
-    return res.status(200).json({ message: "Hotel deleted successfully" });
+    const guests = await Guest.findById({ _id: req.params.id });
+    res.json(guests);
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Server error" });
+    console.log(error)
   }
 });
 
-router.get("/guests/:id", async (req, res) => {
-  const guests = await Guest.findById({ _id: req.params.id });
-  res.json(guests);
-});
-
-router.get("/guest/:hotel",async(req,res)=>{
-  const guests = await Guest.find({hotelId:req.params.hotel})
-  res.json(guests)
+router.get("/guest/:hotel", async (req, res) => {
+  try {
+    const guests = await Guest.find({ hotelId: req.params.hotel })
+    res.json(guests)
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 router.get("/guests", async (req, res) => {
-  const guest = await Guest.find()
-  res.json(guest)
+  try {
+    const guest = await Guest.find()
+    res.json(guest)
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 router.patch("/guests/:id", async (req, res) => {
   try {
-    // Ensure status is part of the body if you're updating it
-    const { status,  } = req.body;
+    const { status, } = req.body;
 
     if (status) {
       updateData.status = status;
@@ -294,7 +312,7 @@ router.patch("/guests/:id", async (req, res) => {
 });
 
 
-
+//login
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ name: req.body.name, role: req.body.role });
