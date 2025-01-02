@@ -1,176 +1,114 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { login } from "../actions/user.actions";
-import { useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
-  const nav = useNavigate();
+  const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [formdata, setformdata] = useState({
+  const [formdata, setFormdata] = useState({
     username: "",
     password: "",
   });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
 
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
+    if (!formdata.username || !formdata.password) {
       setShowError(true);
-    } else {
-      setShowError(false);
-      console.log("Form submitted successfully");
+      return;
     }
     setValidated(true);
-    console.log(formdata);
+    setShowError(false);
+
     const user = await login(
       formdata.username,
       formdata.password,
       "GuestAdmin"
     );
-    console.log(user);
-    !user && setShowError(true);
-
-    user && nav(`/dashboard/guestadmin/${user._id}/hotel/${user.hotelId}`);
+    if (!user) {
+      setShowError(true);
+    } else {
+      navigate(`/dashboard/guestadmin/${user._id}/hotel/${user.hotelId}`);
+    }
   };
 
   return (
-    <Container
-      fluid
-      className="vh-100 d-flex align-items-center justify-content-center"
-      style={{
-        color: "#fff",
-        backgroundColor: "#000", // Strict black background
-      }}
-    >
-      <Row className="h-100 w-100">
-        <Col
-          md={12}
-          xs={12}
-          className="d-flex align-items-center justify-content-center mx-auto"
-        >
-          <div
-            className="bg-dark p-4 rounded"
-            style={{
-              width: "100%",
-              maxWidth: "400px",
-              borderRadius: "16px",
-              boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.5)", // Darker shadow
-            }}
-          >
-            <h2
-              className="text-center mb-2"
-              style={{
-                color: "#fff", // White text for heading
-                fontWeight: "bold",
-                letterSpacing: "1px",
-              }}
-            >
-              Welcome Back
-            </h2>
-            <h4
-              className="text-center mb-4"
-              style={{
-                color: "#fff", // White color for subtitle
-                fontWeight: "600",
-              }}
-            >
-              Guest Admin
-            </h4>
+    <div className="flex items-center justify-center min-h-screen bg-black text-white">
+      <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-center mb-2">Welcome Back</h2>
+        <h4 className="text-lg font-medium text-center mb-6">Guest Admin</h4>
 
-            {showError && (
-              <Alert
-                variant="danger"
-                onClose={() => setShowError(false)}
-                dismissible
-                className="mb-4"
-              >
-                Please fill out all required fields correctly.
-              </Alert>
-            )}
-
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
-              <Form.Group className="mb-4" controlId="formBasicEmail">
-                <Form.Label style={{ color: "#fff" }}>UserName</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Enter your username"
-                  value={formdata.username}
-                  onChange={(e) =>
-                    setformdata({ ...formdata, username: e.target.value })
-                  }
-                  style={{
-                    backgroundColor: "#333", // Dark background for input
-                    color: "#fff", // White text inside input
-                    borderColor: "#555", // Lighter border for inputs
-                  }}
-                />
-                <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="mb-4" controlId="formBasicPassword">
-                <Form.Label style={{ color: "#fff" }}>Password</Form.Label>
-                <Form.Control
-                  required
-                  type="password"
-                  placeholder="Enter your password"
-                  value={formdata.password}
-                  onChange={(e) =>
-                    setformdata({ ...formdata, password: e.target.value })
-                  }
-                  style={{
-                    backgroundColor: "#333", // Dark background for input
-                    color: "#fff", // White text inside input
-                    borderColor: "#555", // Lighter border for inputs
-                  }}
-                />
-              </Form.Group>
-
-              <div className="d-flex justify-content-between align-items-center mb-4">
-                <Form.Check
-                  type="checkbox"
-                  label="Remember me"
-                  style={{ fontSize: "0.9rem", color: "#fff" }} // White color for label
-                />
-              </div>
-
-              <Button
-                variant="primary"
-                type="submit"
-                className="w-100 mb-3"
-                style={{
-                  background: "#555", // Darker button background
-                  border: "none",
-                  fontSize: "1rem",
-                  padding: "0.75rem 0",
-                }}
-              >
-                Sign In
-              </Button>
-
-              <p
-                className="text-center mb-0"
-                style={{ fontSize: "0.9rem", color: "#fff" }}
-              >
-                Are you a MAIN ADMIN?{" "}
-                <Link
-                  to="/"
-                  className="text-decoration-none"
-                  style={{ color: "#fff", fontWeight: "600" }} // White link color
-                >
-                  Sign up
-                </Link>
-              </p>
-            </Form>
+        {showError && (
+          <div className="mb-4 p-3 bg-red-600 text-white text-sm rounded">
+            Please fill out all required fields correctly.
           </div>
-        </Col>
-      </Row>
-    </Container>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="username" className="block mb-1 font-medium">
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              required
+              value={formdata.username}
+              onChange={(e) =>
+                setFormdata({ ...formdata, username: e.target.value })
+              }
+              className="w-full px-4 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:ring focus:ring-blue-500"
+              placeholder="Enter your username"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block mb-1 font-medium">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              required
+              value={formdata.password}
+              onChange={(e) =>
+                setFormdata({ ...formdata, password: e.target.value })
+              }
+              className="w-full px-4 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:ring focus:ring-blue-500"
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <div className="flex items-center justify-between text-sm">
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                className="form-checkbox h-4 w-4 text-blue-500 border-gray-600"
+              />
+              <span className="ml-2">Remember me</span>
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition"
+          >
+            Sign In
+          </button>
+
+          <p className="text-center text-sm mt-4">
+            Are you a MAIN ADMIN?{" "}
+            <Link
+              to="/"
+              className="text-blue-400 font-semibold hover:underline"
+            >
+              Sign up
+            </Link>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 };
 

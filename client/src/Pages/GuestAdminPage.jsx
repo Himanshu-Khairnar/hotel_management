@@ -8,14 +8,14 @@ const GuestForm = () => {
   const [hotels, setHotels] = useState([]);
   const [selectedGuest, setSelectedGuest] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [showStatusModal, setShowStatusModal] = useState(false); // For status change modal
+  const [showStatusModal, setShowStatusModal] = useState(false); 
   const [newStatus, setNewStatus] = useState(""); 
 
   useEffect(() => {
    const guestData = async () => {
      try {
        const data = await getGuests();
-       console.log("guests dta",data); // Check the format of this data
+       console.log("guests dta",data); 
        setGuest(data);
      } catch (error) {
        console.error("Error fetching guest data", error);
@@ -26,7 +26,7 @@ const GuestForm = () => {
      try {
        const hotelData = await specificHotelsbyIds(hotel);
 
-       console.log(hotel); // Check the format of this data
+       console.log(hotel); 
        setHotels(hotelData);
      } catch (error) {
        console.error("Error fetching hotel data", error);
@@ -44,16 +44,16 @@ const GuestForm = () => {
 
   const handleChangeStatus = (guest) => {
     setSelectedGuest(guest);
-    setNewStatus(guest.status); // Set the current status as the initial value
+    setNewStatus(guest.status); 
     setShowStatusModal(true);
   };
 
   const handleSaveStatus = () => {
-    // Call API or perform any other action to save the new status
+
     console.log("Status changed to:", newStatus);
-    // Close the modal
+    
     setShowStatusModal(false);
-    // Optionally update the guest data here
+    
   };
     const handlePrint = () => {
       // Create a new window for printing
@@ -100,7 +100,6 @@ const GuestForm = () => {
 
   return (
     <div className="container-fluid bg-dark text-white p-4 min-vh-100">
-      {/* Navbar with hotel name and image */}
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">

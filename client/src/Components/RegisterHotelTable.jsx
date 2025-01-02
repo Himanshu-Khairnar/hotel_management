@@ -47,7 +47,7 @@ const RegisterHotelTable = () => {
 
   const handleDelete = (hotel) => {
     setSelectedHotel(hotel);
-    
+
     setShowDeleteModal(true);
   };
 
@@ -58,90 +58,75 @@ const RegisterHotelTable = () => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-    editFormData.id=id
+    editFormData.id = id;
     console.log("Edit submitted:", editFormData);
-    const data = await updateHotel(
-      editFormData
-    );
+    const data = await updateHotel(editFormData);
     console.log(data);
     setShowEditModal(false);
   };
 
-  const handleDeleteConfirm = async() => {
+  const handleDeleteConfirm = async () => {
     console.log("Delete confirmed:", selectedHotel._id);
     const data = await deleteHotel(selectedHotel._id);
-    data && location.reload()
+    data && location.reload();
     setShowDeleteModal(false);
   };
 
   return (
-    <div className="container my-5 bg-dark text-white p-4 rounded shadow">
-      <h2 className="text-center mb-4">Hotel List</h2>
+    <div className="container mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-md">
+      <h2 className="text-center text-2xl font-bold mb-6">Hotel List</h2>
+
       {error ? (
-        <div className="alert alert-danger text-center" role="alert">
-          {error}
-        </div>
+        <div className="bg-red-500 text-center py-3 rounded mb-4">{error}</div>
       ) : hotels.length === 0 ? (
-        <div className="text-center p-5">
-          <h4>No hotels found</h4>
+        <div className="text-center py-10">
+          <h4 className="text-lg">No hotels found</h4>
           <p>Add hotels to display them here.</p>
         </div>
       ) : (
-        <div className="table-responsive">
-          <table className="table table-dark table-striped table-hover table-bordered">
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto bg-gray-800 rounded-lg">
             <thead>
-              <tr>
-                <th scope="col">Hotel Name</th>
-                <th scope="col">Logo</th>
-                <th scope="col">Actions</th>
-                <th scope="col">View</th>
+              <tr className="text-left bg-gray-700">
+                <th className="px-4 py-2">Hotel Name</th>
+                <th className="px-4 py-2">Logo</th>
+                <th className="px-4 py-2">Actions</th>
+                <th className="px-4 py-2">View</th>
               </tr>
             </thead>
             <tbody>
               {hotels.map((hotel) => (
-                <tr key={hotel._id} className="align-middle">
-                  <td>{hotel.name || "No Name Available"}</td>
-                  <td>
+                <tr key={hotel._id} className="border-b border-gray-700">
+                  <td className="px-4 py-2">
+                    {hotel.name || "No Name Available"}
+                  </td>
+                  <td className="px-4 py-2">
                     <img
                       src={hotel.logo?.url || "/placeholder-image.png"}
                       alt={`${hotel.name || "Hotel"} logo`}
-                      className="img-fluid rounded-circle"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        objectFit: "cover",
-                      }}
+                      className="w-12 h-12 rounded-full object-cover"
                     />
                   </td>
-                  <td>
+                  <td className="px-4 py-2 flex gap-2">
                     <button
                       onClick={() => handleEdit(hotel)}
-                      className="btn btn-sm btn-outline-warning me-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="Edit"
+                      className="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-1 rounded text-sm"
                     >
-                      <i className="bi bi-pencil">Edit</i>
+                      Edit
                     </button>
                     <button
                       onClick={() => handleDelete(hotel)}
-                      className="btn btn-sm btn-outline-danger"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="Delete"
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
                     >
-                      <i className="bi bi-trash">Delete</i>
+                      Delete
                     </button>
                   </td>
-                  <td>
+                  <td className="px-4 py-2">
                     <button
                       onClick={() => handleView(hotel)}
-                      className="btn btn-sm btn-outline-info"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="View"
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
                     >
-                      <i className="bi bi-eye">View</i>
+                      View
                     </button>
                   </td>
                 </tr>
@@ -150,221 +135,185 @@ const RegisterHotelTable = () => {
           </table>
         </div>
       )}
-
       {/* Modals */}
       {showEditModal && (
-        <div className="modal fade show d-block" tabIndex="-1">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content bg-dark text-white">
-              <div className="modal-header">
-                <h5 className="modal-title">Edit Hotel</h5>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-gray-800 text-white p-6 rounded-lg w-1/3">
+            <h3 className="text-lg font-bold mb-4">Edit Hotel</h3>
+            <form onSubmit={handleEditSubmit}>
+              <div className="mb-4">
+                <label className="block mb-1">Name</label>
+                <input
+                  type="text"
+                  value={editFormData.updatename}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      updatename: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 rounded bg-gray-700 text-white"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-1">Street</label>
+                <input
+                  type="text"
+                  value={editFormData.newStreet}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      newStreet: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 rounded bg-gray-700 text-white"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-1">City</label>
+                <input
+                  type="text"
+                  value={editFormData.newCity}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      newCity: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 rounded bg-gray-700 text-white"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-1">State</label>
+                <input
+                  type="text"
+                  value={editFormData.newState}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      newState: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 rounded bg-gray-700 text-white"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-1">Zip Code</label>
+                <input
+                  type="text"
+                  value={editFormData.newCode}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      newCode: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 rounded bg-gray-700 text-white"
+                />
+              </div>
+              <div className="flex justify-end gap-2">
                 <button
                   type="button"
-                  className="btn-close btn-close-white"
                   onClick={() => setShowEditModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={handleEditSubmit}>
-                  {/* Name Input */}
-                  <div className="mb-3">
-                    <label htmlFor="editName" className="form-label">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="editName"
-                      value={editFormData.updatename}
-                      onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          updatename: e.target.value,
-                        })
-                      }
-                      className="form-control"
-                    />
-                  </div>
-
-                  {/* Address Inputs */}
-                  <div className="mb-3">
-                    <label htmlFor="editStreet" className="form-label">
-                      Street
-                    </label>
-                    <input
-                      type="text"
-                      id="editStreet"
-                      value={editFormData.newStreet}
-                      onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          newStreet: e.target.value,
-                        })
-                      }
-                      className="form-control"
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editCity" className="form-label">
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      id="editCity"
-                      value={editFormData.newCity}
-                      onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-
-                          newCity: e.target.value,
-                        })
-                      }
-                      className="form-control"
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editState" className="form-label">
-                      State
-                    </label>
-                    <input
-                      type="text"
-                      id="editState"
-                      value={editFormData.newState}
-                      onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          newState: e.target.value,
-                        })
-                      }
-                      className="form-control"
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editZipCode" className="form-label">
-                      Zip Code
-                    </label>
-                    <input
-                      type="text"
-                      id="editZipCode"
-                      value={editFormData.newCode}
-                      onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          newCode: e.target.value,
-                        })
-                      }
-                      className="form-control"
-                    />
-                  </div>
-
-                  {/* Buttons */}
-                  <div className="d-flex justify-content-end">
-                    <button
-                      type="button"
-                      className="btn btn-secondary me-2"
-                      onClick={() => setShowEditModal(false)}
-                    >
-                      Cancel
-                    </button>
-                    <button type="submit" className="btn btn-success">
-                      Save Changes
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showDeleteModal && (
-        <div className="modal fade show d-block" tabIndex="-1">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content bg-dark text-white">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirm Delete</h5>
-                <button
-                  type="button"
-                  className="btn-close btn-close-white"
-                  onClick={() => setShowDeleteModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p>Are you sure you want to delete {selectedHotel.name}?</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setShowDeleteModal(false)}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
                 >
                   Cancel
                 </button>
                 <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={handleDeleteConfirm}
+                  type="submit"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
                 >
-                  Confirm
+                  Save
                 </button>
               </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gray-800 text-white rounded-lg shadow-lg max-w-sm w-full">
+            <div className="px-4 py-3 border-b border-gray-700">
+              <h5 className="text-lg font-semibold">Confirm Delete</h5>
+              <button
+                className="absolute top-2 right-2 text-gray-400 hover:text-white"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="px-4 py-3">
+              <p>Are you sure you want to delete {selectedHotel.name}?</p>
+            </div>
+            <div className="flex justify-end space-x-2 px-4 py-3 border-t border-gray-700">
+              <button
+                className="px-4 py-2 text-sm font-medium text-gray-200 bg-gray-600 rounded hover:bg-gray-500"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-500"
+                onClick={handleDeleteConfirm}
+              >
+                Confirm
+              </button>
             </div>
           </div>
         </div>
       )}
 
       {showViewModal && (
-        <div className="modal fade show d-block" tabIndex="-1">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content bg-dark text-white">
-              <div className="modal-header">
-                <h5 className="modal-title">Hotel Details</h5>
-                <button
-                  type="button"
-                  className="btn-close btn-close-white"
-                  onClick={() => setShowViewModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p>
-                  <strong>Name:</strong> {selectedHotel.name}
-                </p>
-                <p>
-                  <strong>Logo:</strong>
-                </p>
-                <img
-                  src={selectedHotel.logo?.url || "/placeholder-image.png"}
-                  alt={`${selectedHotel.name} logo`}
-                  className="img-fluid mb-3"
-                />
-                <p>
-                  <strong>Address:</strong>
-                  <br />
-                  {selectedHotel.address?.street}, {selectedHotel.address?.city}
-                  , {selectedHotel.address?.state} -{" "}
-                  {selectedHotel.address?.zipCode}
-                </p>
-                <p>
-                  <strong>QR Code:</strong>
-                </p>
-                <img
-                  src={selectedHotel.qrCode || "/placeholder-qr.png"}
-                  alt="QR Code"
-                  className="img-fluid mb-3"
-                />
-                <p>
-                  <strong>Created At:</strong>{" "}
-                  {new Date(selectedHotel.createdAt).toLocaleString()}
-                </p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setShowViewModal(false)}
-                >
-                  Close
-                </button>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gray-800 text-white rounded-lg shadow-lg max-w-lg w-full">
+            <div className="px-4 py-3 border-b border-gray-700">
+              <h5 className="text-lg font-semibold">Hotel Details</h5>
+              <button
+                className="absolute top-2 right-2 text-gray-400 hover:text-white"
+                onClick={() => setShowViewModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="px-4 py-3 space-y-4">
+              <p>
+                <strong>Name:</strong> {selectedHotel.name}
+              </p>
+              <p>
+                <strong>Logo:</strong>
+              </p>
+              <img
+                src={selectedHotel.logo?.url || "/placeholder-image.png"}
+                alt={`${selectedHotel.name} logo`}
+              className="w-[5rem] h-[5rem] rounded"
+              />
+              <p>
+                <strong>Address:</strong>
+                <br />
+                {selectedHotel.address?.street}, {selectedHotel.address?.city},{" "}
+                {selectedHotel.address?.state} -{" "}
+                {selectedHotel.address?.zipCode}
+              </p>
+              <p>
+                <strong>QR Code:</strong>
+              </p>
+              <img
+                src={selectedHotel.qrCode || "/placeholder-qr.png"}
+                alt="QR Code"
+                className="h-[5rem] rounded"
+              />
+              <p>
+                <strong>Created At:</strong>{" "}
+                {new Date(selectedHotel.createdAt).toLocaleString()}
+              </p>
+            </div>
+            <div className="flex justify-end px-4 py-3 border-t border-gray-700">
+              <button
+                className="px-4 py-2 text-sm font-medium text-gray-200 bg-gray-600 rounded hover:bg-gray-500"
+                onClick={() => setShowViewModal(false)}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

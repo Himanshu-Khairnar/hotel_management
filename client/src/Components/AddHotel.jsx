@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { registerHotels } from "../actions/user.actions";
-import Alert from "react-bootstrap/Alert";
 
 const AddHotel = () => {
   const [showError, setShowError] = useState(false);
@@ -59,134 +58,130 @@ const AddHotel = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mx-auto mt-10 px-4">
       {showError && (
-        <Alert
-          variant="danger"
-          onClose={() => setShowError(false)}
-          dismissible
-          className="mb-4 text-dark"
-        >
+        <div className="mb-4 bg-red-500 text-gray-800 p-4 rounded">
           An error occurred while adding the hotel. Please try again.
-        </Alert>
+        </div>
       )}
       {showSuccess && (
-        <Alert
-          variant="success"
-          onClose={() => setShowSuccess(false)}
-          dismissible
-          className="mb-4 text-dark"
-        >
+        <div className="mb-4 bg-green-500 text-gray-800 p-4 rounded">
           Hotel added successfully!
-        </Alert>
+        </div>
       )}
-      <h2 className="text-center mb-4 text-white">Add a New Hotel</h2>
+      <h2 className="text-center mb-6 text-gray-800 text-2xl">Add a New Hotel</h2>
       <form
         onSubmit={handleSubmit}
-        className="row g-3 bg-dark p-4 rounded shadow-sm"
-        style={{
-          border: "1px solid #fff",
-        }}
+        className="grid grid-cols-1 gap-6 bg-gray-800 p-6 rounded shadow-lg"
       >
         {/* Hotel Name */}
-        <div className="col-md-6">
-          <label htmlFor="hotelName" className="form-label text-white">
+        <div>
+          <label
+            htmlFor="hotelName"
+            className="block text-white font-medium mb-2"
+          >
             Hotel Name
           </label>
           <input
             type="text"
-            className="form-control bg-black text-white border-white"
             id="hotelName"
             name="hotelName"
             value={formData.hotelName}
             onChange={handleChange}
             required
+            className="w-full p-2 bg-gray-900 text-white rounded"
           />
         </div>
 
         {/* Logo */}
-        <div className="col-md-6">
-          <label htmlFor="logo" className="form-label text-white">
+        <div>
+          <label htmlFor="logo" className="block text-white font-medium mb-2">
             Logo
           </label>
           <input
             type="file"
-            className="form-control bg-black text-white border-white"
             id="logo"
             name="logo"
             accept="image/*"
             onChange={handleChange}
             required
+            className="w-full p-2 bg-gray-900 text-white rounded"
           />
         </div>
 
         {/* Address: Street */}
-        <div className="col-12">
-          <label htmlFor="street" className="form-label text-white">
+        <div>
+          <label htmlFor="street" className="block text-white font-medium mb-2">
             Street
           </label>
           <input
             type="text"
-            className="form-control bg-black text-white border-white"
             id="street"
             name="street"
             value={formData.street}
             onChange={handleChange}
             required
+            className="w-full p-2 bg-gray-900 text-white rounded"
           />
         </div>
 
         {/* Address: City */}
-        <div className="col-md-6">
-          <label htmlFor="city" className="form-label text-white">
+        <div>
+          <label htmlFor="city" className="block text-white font-medium mb-2">
             City
           </label>
           <input
             type="text"
-            className="form-control bg-black text-white border-white"
             id="city"
             name="city"
             value={formData.city}
             onChange={handleChange}
             required
+            className="w-full p-2 bg-gray-900 text-white rounded"
           />
         </div>
 
         {/* Address: State */}
-        <div className="col-md-4">
-          <label htmlFor="state" className="form-label text-white">
+        <div>
+          <label htmlFor="state" className="block text-white font-medium mb-2">
             State
           </label>
           <input
             type="text"
-            className="form-control bg-black text-white border-white"
             id="state"
             name="state"
             value={formData.state}
             onChange={handleChange}
             required
+            className="w-full p-2 bg-gray-900 text-white rounded"
           />
         </div>
 
         {/* Address: Zip Code */}
-        <div className="col-md-2">
-          <label htmlFor="zipCode" className="form-label text-white">
+        <div>
+          <label
+            htmlFor="zipCode"
+            className="block text-white font-medium mb-2"
+          >
             Zip Code
           </label>
           <input
             type="text"
-            className="form-control bg-black text-white border-white"
             id="zipCode"
             name="zipCode"
             value={formData.zipCode}
             onChange={handleChange}
             required
+            className="w-full p-2 bg-gray-900 text-white rounded"
           />
         </div>
 
         {/* Submit Button */}
-        <div className="col-12 text-center">
-          <button type="submit" className="btn btn-light px-5">
+        <div className="text-center">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+          >
             Submit
           </button>
         </div>
@@ -194,11 +189,11 @@ const AddHotel = () => {
 
       {/* Display QR Code if hotel is added */}
       {hotel?.qrCode && (
-        <div className="text-center mt-4">
+        <div className="text-center mt-6">
           <img
             src={hotel.qrCode}
             alt="Hotel QR Code"
-            style={{ border: "2px solid white" }}
+            className="border-2 border-white"
           />
         </div>
       )}
