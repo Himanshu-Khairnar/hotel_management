@@ -1,7 +1,7 @@
 import axios from "axios"
 
 
-const baseURL = 'http://localhost:3000/api'
+const baseURL = 'https://hotel-management-qx2p.vercel.app/api'
 
 export const login = async (userName, password, role) => {
     console.log(userName, password)
