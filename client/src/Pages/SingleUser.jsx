@@ -8,6 +8,7 @@ const SingleUser = () => {
   const [showQR, setShowQR] = useState(false);
   const [copied, setCopied] = useState(false);
   const [urlCopied, setUrlCopied] = useState(false);
+  const [copyMessage, setCopyMessage] = useState(""); // Added copy message state
 
   useEffect(() => {
     const getData = async () => {
@@ -32,10 +33,10 @@ const SingleUser = () => {
       .then(() => setCopyMessage("URL copied to clipboard!"))
       .catch(() => setCopyMessage("Failed to copy URL."));
   };
+
   // Copy details to clipboard
   const copyDetails = () => {
-    const details = `
-      Guest Details:
+    const details = `Guest Details:
       Full Name: ${user.fullName}
       Email: ${user.emailId}
       Mobile: ${user.mobileNumber}
@@ -63,125 +64,100 @@ const SingleUser = () => {
 
   if (!user) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
+      <div className="flex justify-center items-center min-h-screen">
         <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+          <span className="sr-only">Loading...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container py-5">
+    <div className="m-10 py-5">
       {/* Action Buttons */}
-      
-      <div className="d-flex justify-content-end gap-2 mb-4 d-print-none">
-        
+      <div className="flex justify-end gap-4 mb-4">
         <button
           className="btn btn-outline-light"
           onClick={() => setShowQR(!showQR)}
         >
           {showQR ? "Hide QR Code" : "Show QR Code"}
         </button>
-        
+
         <button className="btn btn-outline-primary" onClick={copyDetails}>
           {copied ? "Copied!" : "Copy Details"}
         </button>
         <button className="btn btn-primary" onClick={handlePrint}>
           Print Details
         </button>
+
+        {/* URL Copy Message */}
+        {copyMessage && <span className="text-green-500">{copyMessage}</span>}
       </div>
 
       {/* Welcome Card */}
-      <div className="card bg-dark text-white mb-4 border-0 shadow">
-        <div className="card-body text-center p-4">
-          <h1 className="card-title display-5 text-primary mb-3">
+      <div className="bg-gray-800 text-white rounded-lg shadow-lg p-6 mb-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-blue-500 mb-3">
             Thank You for Registering!
           </h1>
-          <p className="card-text lead">
-            Dear <span className="fw-bold">{user.fullName}</span>, we appreciate
-            your registration at our hotel. Enjoy your stay!
+          <p className="text-lg">
+            Dear <span className="font-bold">{user.fullName}</span>, we
+            appreciate your registration at our hotel. Enjoy your stay!
           </p>
 
           {/* QR Code Section */}
           {showQR && (
-            <div className="mt-4 d-print-none">
-              <div className="bg-white p-3 rounded d-inline-block">
+            <div className="mt-4">
+              <div className="bg-white p-4 rounded-lg inline-block">
                 <img
                   src={getQRCode()}
                   alt="Guest QR Code"
-                  className="img-fluid"
+                  className="w-32 h-32"
                 />
               </div>
-              <p className="text-muted mt-2">Scan for mobile pass</p>
+              <p className="text-gray-400 mt-2">Scan for mobile pass</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Guest Details Card */}
-      <div className="card bg-dark text-white border-0 shadow">
-        <div className="card-body p-4">
-          <h2 className="card-title text-center mb-4">Guest Details</h2>
+      <div className="bg-gray-800 text-white rounded-lg shadow-lg p-6">
+        <h2 className="text-2xl font-semibold text-center mb-6">
+          Guest Details
+        </h2>
 
-          <div className="row g-4">
-            {/* Details grid with hover effect */}
-            <div className="col-md-6">
-              <div className="p-3 bg-secondary rounded hover-effect">
-                <h6 className="text-white-50 mb-2">Full Name</h6>
-                <p className="mb-0 fs-5">{user.fullName}</p>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Details grid */}
+          {[
+            { label: "Full Name", value: user.fullName },
+            { label: "Email ID", value: user.emailId },
+            { label: "Mobile Number", value: user.mobileNumber },
+            { label: "ID Proof Number", value: user.idProofNumber },
+            { label: "Purpose of Visit", value: user.purposeOfVisit },
+            { label: "Status", value: user.status },
+            {
+              label: "Stay Dates",
+              value: `${new Date(
+                user.stayDates.from
+              ).toLocaleDateString()} to ${new Date(
+                user.stayDates.to
+              ).toLocaleDateString()}`,
+            },
+          ].map(({ label, value }) => (
+            <div
+              key={label}
+              className="bg-gray-700 p-4 rounded-lg hover:shadow-lg"
+            >
+              <h6 className="text-gray-400 mb-2">{label}</h6>
+              <p className="text-lg">{value}</p>
             </div>
+          ))}
 
-            <div className="col-md-6">
-              <div className="p-3 bg-secondary rounded hover-effect">
-                <h6 className="text-white-50 mb-2">Email ID</h6>
-                <p className="mb-0 fs-5">{user.emailId}</p>
-              </div>
-            </div>
-
-            <div className="col-md-6">
-              <div className="p-3 bg-secondary rounded hover-effect">
-                <h6 className="text-white-50 mb-2">Mobile Number</h6>
-                <p className="mb-0 fs-5">{user.mobileNumber}</p>
-              </div>
-            </div>
-
-            <div className="col-md-6">
-              <div className="p-3 bg-secondary rounded hover-effect">
-                <h6 className="text-white-50 mb-2">ID Proof Number</h6>
-                <p className="mb-0 fs-5">{user.idProofNumber}</p>
-              </div>
-            </div>
-
-            <div className="col-md-6">
-              <div className="p-3 bg-secondary rounded hover-effect">
-                <h6 className="text-white-50 mb-2">Purpose of Visit</h6>
-                <p className="mb-0 fs-5">{user.purposeOfVisit}</p>
-              </div>
-            </div>
-
-            <div className="col-md-6">
-              <div className="p-3 bg-secondary rounded hover-effect">
-                <h6 className="text-white-50 mb-2">Status</h6>
-                <p className="mb-0 fs-5">{user.status}</p>
-              </div>
-            </div>
-
-            <div className="col-12">
-              <div className="p-3 bg-secondary rounded hover-effect">
-                <h6 className="text-white-50 mb-2">Stay Dates</h6>
-                <p className="mb-0 fs-5">
-                  From {new Date(user.stayDates.from).toLocaleDateString()} to{" "}
-                  {new Date(user.stayDates.to).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 p-3 bg-secondary rounded text-center hover-effect">
-            <h3 className="h5 text-white-50 mb-2">Address</h3>
-            <p className="mb-0 fs-5">
+          {/* Address */}
+          <div className="col-span-2 bg-gray-700 p-4 rounded-lg hover:shadow-lg">
+            <h6 className="text-gray-400 mb-2">Address</h6>
+            <p className="text-lg">
               {user.address.street}, {user.address.city}, {user.address.state} -{" "}
               {user.address.zipCode}
             </p>
@@ -189,7 +165,7 @@ const SingleUser = () => {
         </div>
       </div>
 
-      {/* styling while printing details*/}
+      {/* Styling while printing details */}
       <style>
         {`
           @media print {
@@ -216,13 +192,6 @@ const SingleUser = () => {
             .d-print-none {
               display: none !important;
             }
-          }
-          .hover-effect {
-            transition: transform 0.2s ease-in-out;
-          }
-          .hover-effect:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
           }
         `}
       </style>

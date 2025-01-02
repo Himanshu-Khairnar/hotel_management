@@ -61,29 +61,16 @@ const User = () => {
   };
 
   return (
-    <div
-      className=""
-      style={{
-        backgroundColor: "#121212", // Dark background for the form container
-        color: "#fff", // White text for readability
-        padding: "20px",
-      }}
-    >
-      <h2 className="text-center mb-4" style={{ color: "#fff" }}>
+    <div className="bg-gray-900 text-white min-h-screen p-8">
+      <h2 className="text-3xl font-semibold text-center mb-6">
         Guest Registration Form
       </h2>
 
       {submissionStatus && (
         <div
-          style={{
-            backgroundColor:
-              submissionStatus === "success" ? "#007BFF" : "#FF4444", // Blue for success, Red for error
-            color: "#fff",
-            padding: "10px",
-            textAlign: "center",
-            marginBottom: "20px",
-            borderRadius: "5px",
-          }}
+          className={`text-white p-4 text-center mb-6 rounded-lg ${
+            submissionStatus === "success" ? "bg-blue-600" : "bg-red-600"
+          }`}
         >
           {submissionStatus === "success"
             ? "Thank you! Your form has been successfully submitted."
@@ -93,199 +80,124 @@ const User = () => {
 
       <form onSubmit={handleSubmit}>
         {/* Name */}
-        <div className="mb-3">
-          <label
-            htmlFor="name"
-            className="form-label"
-            style={{ color: "#fff" }}
-          >
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-sm font-medium">
             Full Name
           </label>
           <input
             type="text"
-            className="form-control"
             id="name"
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
             required
-            style={{
-              backgroundColor: "#333", // Dark input fields
-              color: "#fff", // White text inside input
-              borderColor: "#555", // Lighter border for inputs
-            }}
+            className="mt-2 p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
           />
         </div>
 
         {/* Mobile Number */}
-        <div className="mb-3">
-          <label
-            htmlFor="mobileNumber"
-            className="form-label"
-            style={{ color: "#fff" }}
-          >
+        <div className="mb-4">
+          <label htmlFor="mobileNumber" className="block text-sm font-medium">
             Mobile Number
           </label>
           <input
             type="tel"
-            className="form-control"
             id="mobileNumber"
             name="mobileNumber"
             value={formData.mobileNumber}
             onChange={handleChange}
             required
-            style={{
-              backgroundColor: "#333", // Dark input fields
-              color: "#fff", // White text inside input
-              borderColor: "#555", // Lighter border for inputs
-            }}
+            className="mt-2 p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
           />
         </div>
 
         {/* Email */}
-        <div className="mb-3">
-          <label
-            htmlFor="email"
-            className="form-label"
-            style={{ color: "#fff" }}
-          >
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium">
             Email
           </label>
           <input
             type="email"
-            className="form-control"
             id="email"
             name="emailId"
             value={formData.emailId}
             onChange={handleChange}
             required
-            style={{
-              backgroundColor: "#333", // Dark input fields
-              color: "#fff", // White text inside input
-              borderColor: "#555", // Lighter border for inputs
-            }}
+            className="mt-2 p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
           />
         </div>
 
         {/* ID Proof Number */}
-        <div className="mb-3">
-          <label
-            htmlFor="idProofNumber"
-            className="form-label"
-            style={{ color: "#fff" }}
-          >
+        <div className="mb-4">
+          <label htmlFor="idProofNumber" className="block text-sm font-medium">
             ID Proof Number
           </label>
           <input
             type="text"
-            className="form-control"
             id="idProofNumber"
             name="idProofNumber"
             value={formData.idProofNumber}
             onChange={handleChange}
             required
-            style={{
-              backgroundColor: "#333", // Dark input fields
-              color: "#fff", // White text inside input
-              borderColor: "#555", // Lighter border for inputs
-            }}
+            className="mt-2 p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
           />
         </div>
 
         {/* Address */}
-        <div className="mb-3">
-          <label className="form-label" style={{ color: "#fff" }}>
-            Address
-          </label>
-          <div className="row">
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control mb-2"
-                placeholder="Street"
-                name="street"
-                value={formData.street}
-                onChange={handleChange}
-                required
-                style={{
-                  backgroundColor: "#333", // Dark input fields
-                  color: "#fff", // White text inside input
-                  borderColor: "#555", // Lighter border for inputs
-                }}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control mb-2"
-                placeholder="City"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                required
-                style={{
-                  backgroundColor: "#333", // Dark input fields
-                  color: "#fff", // White text inside input
-                  borderColor: "#555", // Lighter border for inputs
-                }}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control mb-2"
-                placeholder="State"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                required
-                style={{
-                  backgroundColor: "#333", // Dark input fields
-                  color: "#fff", // White text inside input
-                  borderColor: "#555", // Lighter border for inputs
-                }}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control mb-2"
-                placeholder="Zip Code"
-                name="zipCode"
-                value={formData.zipCode}
-                onChange={handleChange}
-                required
-                style={{
-                  backgroundColor: "#333", // Dark input fields
-                  color: "#fff", // White text inside input
-                  borderColor: "#555", // Lighter border for inputs
-                }}
-              />
-            </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium">Address</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              className="p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
+              placeholder="Street"
+              name="street"
+              value={formData.street}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              className="p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
+              placeholder="City"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              className="p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
+              placeholder="State"
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              className="p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
+              placeholder="Zip Code"
+              name="zipCode"
+              value={formData.zipCode}
+              onChange={handleChange}
+              required
+            />
           </div>
         </div>
 
         {/* Purpose of Visit */}
-        <div className="mb-3">
-          <label
-            htmlFor="purposeOfVisit"
-            className="form-label"
-            style={{ color: "#fff" }}
-          >
+        <div className="mb-4">
+          <label htmlFor="purposeOfVisit" className="block text-sm font-medium">
             Purpose of Visit
           </label>
           <select
-            className="form-control"
             id="purposeOfVisit"
             name="purposeOfVisit"
             value={formData.purposeOfVisit}
             onChange={handleChange}
             required
-            style={{
-              backgroundColor: "#333", // Dark input fields
-              color: "#fff", // White text inside input
-              borderColor: "#555", // Lighter border for inputs
-            }}
+            className="mt-2 p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
           >
             <option value="" disabled>
               Select Purpose
@@ -297,51 +209,33 @@ const User = () => {
         </div>
 
         {/* Stay Dates */}
-        <div className="row">
-          <div className="col-md-6 mb-3">
-            <label
-              htmlFor="stayFrom"
-              className="form-label"
-              style={{ color: "#fff" }}
-            >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label htmlFor="stayFrom" className="block text-sm font-medium">
               Stay From
             </label>
             <input
               type="date"
-              className="form-control"
               id="stayFrom"
               name="from"
               value={formData.from}
               onChange={handleChange}
               required
-              style={{
-                backgroundColor: "#333", // Dark input fields
-                color: "#fff", // White text inside input
-                borderColor: "#555", // Lighter border for inputs
-              }}
+              className="mt-2 p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
             />
           </div>
-          <div className="col-md-6 mb-3">
-            <label
-              htmlFor="stayTo"
-              className="form-label"
-              style={{ color: "#fff" }}
-            >
+          <div>
+            <label htmlFor="stayTo" className="block text-sm font-medium">
               Stay To
             </label>
             <input
               type="date"
-              className="form-control"
               id="stayTo"
               name="to"
               value={formData.to}
               onChange={handleChange}
               required
-              style={{
-                backgroundColor: "#333", // Dark input fields
-                color: "#fff", // White text inside input
-                borderColor: "#555", // Lighter border for inputs
-              }}
+              className="mt-2 p-2 w-full bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-600"
             />
           </div>
         </div>
@@ -349,12 +243,7 @@ const User = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="btn btn-light"
-          style={{
-            backgroundColor: "#444", // Dark button color
-            border: "none",
-            color: "#fff", // White text on button
-          }}
+          className="w-full py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:ring-2 focus:ring-blue-600"
         >
           Submit
         </button>

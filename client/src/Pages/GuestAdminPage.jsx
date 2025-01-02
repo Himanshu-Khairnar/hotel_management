@@ -8,33 +8,30 @@ const GuestForm = () => {
   const [hotels, setHotels] = useState([]);
   const [selectedGuest, setSelectedGuest] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [showStatusModal, setShowStatusModal] = useState(false); 
-  const [newStatus, setNewStatus] = useState(""); 
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [newStatus, setNewStatus] = useState("");
 
   useEffect(() => {
-   const guestData = async () => {
-     try {
-       const data = await getGuests();
-       console.log("guests dta",data); 
-       setGuest(data);
-     } catch (error) {
-       console.error("Error fetching guest data", error);
-     }
-   };
+    const fetchGuestData = async () => {
+      try {
+        const data = await getGuests();
+        setGuest(data);
+      } catch (error) {
+        console.error("Error fetching guest data", error);
+      }
+    };
 
-   const hotelData = async () => {
-     try {
-       const hotelData = await specificHotelsbyIds(hotel);
+    const fetchHotelData = async () => {
+      try {
+        const hotelData = await specificHotelsbyIds(hotel);
+        setHotels(hotelData);
+      } catch (error) {
+        console.error("Error fetching hotel data", error);
+      }
+    };
 
-       console.log(hotel); 
-       setHotels(hotelData);
-     } catch (error) {
-       console.error("Error fetching hotel data", error);
-     }
-   };
-
-    guestData();
-    hotelData();
+    fetchGuestData();
+    fetchHotelData();
   }, [hotel]);
 
   const handleShowDetails = (guest) => {
@@ -44,113 +41,61 @@ const GuestForm = () => {
 
   const handleChangeStatus = (guest) => {
     setSelectedGuest(guest);
-    setNewStatus(guest.status); 
+    setNewStatus(guest.status);
     setShowStatusModal(true);
   };
 
   const handleSaveStatus = () => {
-
     console.log("Status changed to:", newStatus);
-    
     setShowStatusModal(false);
-    
   };
-    const handlePrint = () => {
-      // Create a new window for printing
-      const printWindow = window.open("", "", "height=800,width=600");
 
-      // Extract only the data to print
-      const printContent = `
-      <div style="font-family: Arial, sans-serif; padding: 20px;">
-        <h2>Guest Details</h2>
-        <p><strong>Full Name:</strong> ${selectedGuest.fullName}</p>
-        <p><strong>Mobile:</strong> ${selectedGuest.mobileNumber}</p>
-        <p><strong>Email:</strong> ${selectedGuest.emailId}</p>
-        <p><strong>Purpose of Visit:</strong> ${
-          selectedGuest.purposeOfVisit
-        }</p>
-        <p><strong>Status:</strong> ${selectedGuest.status}</p>
-        <p><strong>ID Proof Number:</strong> ${selectedGuest.idProofNumber}</p>
-        <p><strong>Address:</strong></p>
-        <ul>
-          <li><strong>Street:</strong> ${selectedGuest.address.street}</li>
-          <li><strong>City:</strong> ${selectedGuest.address.city}</li>
-          <li><strong>State:</strong> ${selectedGuest.address.state}</li>
-          <li><strong>Zip Code:</strong> ${selectedGuest.address.zipCode}</li>
-        </ul>
-        <p><strong>Stay Dates:</strong></p>
-        <ul>
-          <li><strong>From:</strong> ${new Date(
-            selectedGuest.stayDates.from
-          ).toLocaleDateString()}</li>
-          <li><strong>To:</strong> ${new Date(
-            selectedGuest.stayDates.to
-          ).toLocaleDateString()}</li>
-        </ul>
-      </div>
-    `;
-
-      // Write the content to the new window
-      printWindow.document.write(printContent);
-      printWindow.document.close(); // Close the document to apply changes
-
-      // Trigger the print dialog
-      printWindow.print();
-    };
+ 
 
   return (
-    <div className="container-fluid bg-dark text-white p-4 min-vh-100">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            {/* Display hotel image and name */}
-            <div className="d-flex align-items-center">
-              <img
-                src={hotels?.logo?.url} // assuming first hotel for display
-                alt={hotels.name}
-                style={{ width: "40px", height: "40px", objectFit: "cover" }}
-                className="rounded-circle me-2"
-              />
-              <span>{hotels?.name}</span>
-            </div>
-          </a>
-        </div>
-      </nav>
+    <div className="bg-gray-900 text-white min-h-screen p-6">
+      <header className="flex items-center space-x-4 mb-8">
+        <img
+          src={hotels?.logo?.url}
+          alt={hotels.name}
+          className="w-10 h-10 rounded-full"
+        />
+        <h1 className="text-2xl font-bold">{hotels?.name}</h1>
+      </header>
 
-      <h2 className="text-center mb-4">Guest List</h2>
-      <div className="table-responsive">
-        <table className="table table-dark table-hover">
-          <thead>
+      <h2 className="text-center text-xl font-semibold mb-6">Guest List</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full border border-gray-700 text-left">
+          <thead className="bg-gray-800">
             <tr>
-              <th>Full Name</th>
-              <th>Mobile</th>
-              <th>Email</th>
-              <th>Purpose</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th className="p-4">Full Name</th>
+              <th className="p-4">Mobile</th>
+              <th className="p-4">Email</th>
+              <th className="p-4">Purpose</th>
+              <th className="p-4">Status</th>
+              <th className="p-4">Actions</th>
             </tr>
           </thead>
           <tbody>
             {guest.map((g) => (
-              <tr key={g._id}>
-                <td>{g.fullName}</td>
-                <td>{g.mobileNumber}</td>
-                <td>{g.emailId}</td>
-                <td>{g.purposeOfVisit}</td>
-                <td>
+              <tr key={g._id} className="border-t border-gray-700">
+                <td className="p-4">{g.fullName}</td>
+                <td className="p-4">{g.mobileNumber}</td>
+                <td className="p-4">{g.emailId}</td>
+                <td className="p-4">{g.purposeOfVisit}</td>
+                <td className="p-4">
                   <span
-                    className={`badge ${
-                      g.status === "Active" ? "bg-success" : "bg-danger"
-                    }`}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleChangeStatus(g)} // Open status change modal
+                    className={`px-3 py-1 rounded-full text-sm ${
+                      g.status === "Active" ? "bg-green-600" : "bg-red-600"
+                    } cursor-pointer`}
+                    onClick={() => handleChangeStatus(g)}
                   >
                     {g.status}
                   </span>
                 </td>
-                <td>
+                <td className="p-4">
                   <button
-                    className="btn btn-info btn-sm"
+                    className="px-4 py-2 bg-blue-600 rounded text-sm"
                     onClick={() => handleShowDetails(g)}
                   >
                     View Details
@@ -162,155 +107,84 @@ const GuestForm = () => {
         </table>
       </div>
 
-      {/* Modal for detailed view */}
-      <div
-        className={`modal fade ${showModal ? "show" : ""}`}
-        style={{ display: showModal ? "block" : "none" }}
-      >
-        <div className="modal-dialog modal-lg modal-dialog-centered">
-          <div className="modal-content bg-dark text-white">
-            <div className="modal-header border-secondary">
-              <h5 className="modal-title">Guest Details</h5>
-              <button
-                type="button"
-                className="btn-close btn-close-white"
-                onClick={() => setShowModal(false)}
-              ></button>
-            </div>
-            <div className="modal-body">
-              {selectedGuest && (
-                <div className="container">
-                  <p>
-                    <strong>Full Name:</strong> {selectedGuest.fullName}
-                  </p>
-                  <p>
-                    <strong>Mobile:</strong> {selectedGuest.mobileNumber}
-                  </p>
-                  <p>
-                    <strong>Email:</strong> {selectedGuest.emailId}
-                  </p>
-                  <p>
-                    <strong>Purpose of Visit:</strong>{" "}
-                    {selectedGuest.purposeOfVisit}
-                  </p>
-                  <p>
-                    <strong>Status:</strong> {selectedGuest.status}
-                  </p>
-                  <p>
-                    <strong>ID Proof Number:</strong>{" "}
-                    {selectedGuest.idProofNumber}
-                  </p>
-                  <p>
-                    <strong>Address:</strong>
-                  </p>
-                  <ul>
-                    <li>
-                      <strong>Street:</strong> {selectedGuest.address.street}
-                    </li>
-                    <li>
-                      <strong>City:</strong> {selectedGuest.address.city}
-                    </li>
-                    <li>
-                      <strong>State:</strong> {selectedGuest.address.state}
-                    </li>
-                    <li>
-                      <strong>Zip Code:</strong> {selectedGuest.address.zipCode}
-                    </li>
-                  </ul>
-                  <p>
-                    <strong>Stay Dates:</strong>
-                  </p>
-                  <ul>
-                    <li>
-                      <strong>From:</strong>{" "}
-                      {new Date(
-                        selectedGuest.stayDates.from
-                      ).toLocaleDateString()}
-                    </li>
-                    <li>
-                      <strong>To:</strong>{" "}
-                      {new Date(
-                        selectedGuest.stayDates.to
-                      ).toLocaleDateString()}
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
+      {/* Modal for details */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-1/2">
+            <h3 className="text-lg font-bold mb-4">Guest Details</h3>
+            <p>
+              <strong>Full Name:</strong> {selectedGuest.fullName}
+            </p>
+            <p>
+              <strong>Mobile:</strong> {selectedGuest.mobileNumber}
+            </p>
+            <p>
+              <strong>Email:</strong> {selectedGuest.emailId}
+            </p>
+            <p>
+              <strong>Purpose of Visit:</strong> {selectedGuest.purposeOfVisit}
+            </p>
+            <p>
+              <strong>Status:</strong> {selectedGuest.status}
+            </p>
+            <p>
+              <strong>ID Proof Number:</strong> {selectedGuest.idProofNumber}
+            </p>
+            <p>
+              <strong>Stay from:</strong>{" "}
+              {new Date(selectedGuest.stayDates.from).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Stay from:</strong>{" "}
+              {new Date(selectedGuest.stayDates.to).toLocaleDateString()}
+            </p>
 
-            <div className="modal-footer border-secondary">
+            <p>
+              <strong>Submitted At:</strong>{" "}
+              {new Date(selectedGuest.createdAt).toLocaleDateString()}
+            </p>
+
+            <div className="flex justify-between">
               <button
-                type="button"
-                className="btn btn-secondary"
+                className="mt-4 px-4 py-2 bg-blue-600 rounded"
                 onClick={() => setShowModal(false)}
               >
                 Close
               </button>
               <button
-                type="button"
-                className="btn btn-info"
-                onClick={handlePrint} // Trigger the print logic
+                className="mt-4 px-4 py-2 bg-white text-blue-500 rounded"
+                onClick={() => print()}
               >
                 Print
               </button>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Modal for changing status */}
-      <div
-        className={`modal fade ${showStatusModal ? "show" : ""}`}
-        style={{ display: showStatusModal ? "block" : "none" }}
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content bg-dark text-white">
-            <div className="modal-header border-secondary">
-              <h5 className="modal-title">Change Status</h5>
-              <button
-                type="button"
-                className="btn-close btn-close-white"
-                onClick={() => setShowStatusModal(false)}
-              ></button>
-            </div>
-            <div className="modal-body">
-              {selectedGuest && (
-                <div className="form-group">
-                  <label className="text-white-50">Select New Status</label>
-                  <select
-                    className="form-select"
-                    value={newStatus}
-                    onChange={(e) => setNewStatus(e.target.value)}
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Accept</option>
-                    <option value="Pending">Pending</option>
-                  </select>
-                </div>
-              )}
-            </div>
-            <div className="modal-footer border-secondary">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => setShowStatusModal(false)}
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleSaveStatus}
-              >
-                Save Status
-              </button>
-            </div>
+      {showStatusModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+            <h3 className="text-lg font-bold mb-4">Change Status</h3>
+            <select
+              className="block w-full p-2 bg-gray-700 border border-gray-600 rounded"
+              value={newStatus}
+              onChange={(e) => setNewStatus(e.target.value)}
+            >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Pending">Pending</option>
+            </select>
+            <button
+              className="mt-4 px-4 py-2 bg-blue-600 rounded"
+              onClick={handleSaveStatus}
+            >
+              Save
+            </button>
           </div>
         </div>
-      </div>
-
-      {showModal && <div className="modal-backdrop fade show"></div>}
-      {showStatusModal && <div className="modal-backdrop fade show"></div>}
+      )}
     </div>
   );
 };
