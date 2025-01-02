@@ -58,18 +58,18 @@ const AddHotel = () => {
   };
 
   return (
-    <div className="container mx-auto mt-10 px-4">
+    <div className=" mx-auto mb-10 px-4 ">
       {showError && (
-        <div className="mb-4 bg-red-500 text-gray-800 p-4 rounded">
+        <div className="mb-4 bg-red-500 text-white p-4 rounded">
           An error occurred while adding the hotel. Please try again.
         </div>
       )}
       {showSuccess && (
-        <div className="mb-4 bg-green-500 text-gray-800 p-4 rounded">
+        <div className="mb-4 bg-white text-gray-800 p-4 rounded">
           Hotel added successfully!
         </div>
       )}
-      <h2 className="text-center mb-6 text-gray-800 text-2xl">Add a New Hotel</h2>
+      <h2 className="text-center mb-6 text-white text-2xl">Add a New Hotel</h2>
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 gap-6 bg-gray-800 p-6 rounded shadow-lg"
